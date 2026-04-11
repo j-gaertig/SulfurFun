@@ -53,19 +53,25 @@ public final class SulfurFun extends JavaPlugin {
         String gray = ChatColor.GRAY.toString();
 
         Bukkit.getConsoleSender().sendMessage("");
-        Bukkit.getConsoleSender().sendMessage(gold + ChatColor.BOLD + "      Sulfur");
-        Bukkit.getConsoleSender().sendMessage(gold + "  .-----------.");
-        Bukkit.getConsoleSender().sendMessage(gold + "  |    " + yellow + "FUN" + gold + "    |");
-        Bukkit.getConsoleSender().sendMessage(gold + "  |           |");
-        Bukkit.getConsoleSender().sendMessage(gold + "  |           |");
-        Bukkit.getConsoleSender().sendMessage(gold + "  |  " + yellow + "☐     ☐" + gold + "  |");
-        Bukkit.getConsoleSender().sendMessage(gold + "  '-----------'");
+        Bukkit.getConsoleSender().sendMessage(gold + ChatColor.BOLD + "           SulfurFun");
         Bukkit.getConsoleSender().sendMessage("");
-        Bukkit.getConsoleSender().sendMessage(green + "Plugin loaded ...");
+        Bukkit.getConsoleSender().sendMessage(gold + "      ████████████████████      ");
+        Bukkit.getConsoleSender().sendMessage(gold + "      ██                ██      ");
+        Bukkit.getConsoleSender().sendMessage(gold + "      ██                ██      ");
+        Bukkit.getConsoleSender().sendMessage(gold + "      ██                ██      ");
+        Bukkit.getConsoleSender().sendMessage(gold + "      ██                ██      ");
+        Bukkit.getConsoleSender().sendMessage(gold + "      ██                ██      ");
+        Bukkit.getConsoleSender().sendMessage("");
+        Bukkit.getConsoleSender().sendMessage(yellow + "    ██████            ██████    ");
+        Bukkit.getConsoleSender().sendMessage(yellow + "    ██████            ██████    ");
+        Bukkit.getConsoleSender().sendMessage(yellow + "    ██████            ██████    ");
+        Bukkit.getConsoleSender().sendMessage("");
+        Bukkit.getConsoleSender().sendMessage(yellow + "              ████              ");
+        Bukkit.getConsoleSender().sendMessage("");
         Bukkit.getConsoleSender().sendMessage(gray + "Version: " + getDescription().getVersion());
+        Bukkit.getConsoleSender().sendMessage(green + "Plugin loaded ...");
         Bukkit.getConsoleSender().sendMessage("");
     }
-
     @Override
     public void onDisable() {
         // Plugin shutdown logic
