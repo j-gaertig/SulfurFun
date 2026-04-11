@@ -42,15 +42,11 @@ public class NewGame implements CommandExecutor, TabCompleter {
 
 
     private final SulfurFun plugin;
-    private final File file;
-    private final FileConfiguration config;
     private SetupListener setupListener;
 
     public NewGame(SulfurFun plugin, SetupListener setupListener) {
         this.plugin = plugin;
         this.setupListener = setupListener;
-        this.file = new File(plugin.getDataFolder(), "arenas.yml");
-        this.config = YamlConfiguration.loadConfiguration(file);
     }
 
     public void setSetupListener(SetupListener setupListener) {
@@ -77,14 +73,14 @@ public class NewGame implements CommandExecutor, TabCompleter {
         String playerperteam = "";
         String playerdamage = "";
 
-        if (config.contains(name)) {
+        if (plugin.getArenaConfig().contains(name)) {
             player.sendMessage(ChatColor.RED + "Warning: '" + name + "' already exists!");
             return true;
         }
 
         // welcher type -> dementsprechend eine Aktion
         if (type.equalsIgnoreCase("football")) {
-            config.set(name + ".type", type);
+            plugin.getArenaConfig().set(name + ".type", type);
 
             setupListener.addPlayer(player.getUniqueId(), name);
 
@@ -93,13 +89,7 @@ public class NewGame implements CommandExecutor, TabCompleter {
 
 
             // Datei speichern
-            try {
-                config.save(file);
-                player.sendMessage(ChatColor.GREEN + "Arena " + name + " is now saved!");
-            } catch (IOException e) {
-                player.sendMessage(ChatColor.RED + "Error while saving to file!");
-                e.printStackTrace();
-            }
+            plugin.saveArenaConfig();
 
 
         } else {
@@ -128,18 +118,13 @@ public class NewGame implements CommandExecutor, TabCompleter {
             String stepName = steps[currentStepIndex];
             String path = session.getArenaName() + "." + stepName;
 
-            config.set(path + ".world", loc.getWorld().getName());
-            config.set(path + ".x", loc.getBlockX());
-            config.set(path + ".y", loc.getBlockY());
-            config.set(path + ".z", loc.getBlockZ());
+            plugin.getArenaConfig().set(path + ".world", loc.getWorld().getName());
+            plugin.getArenaConfig().set(path + ".x", loc.getBlockX());
+            plugin.getArenaConfig().set(path + ".y", loc.getBlockY());
+            plugin.getArenaConfig().set(path + ".z", loc.getBlockZ());
 
             // WICHTIG: Die Datei tatsächlich auf der Festplatte speichern
-            try {
-                config.save(file);
-            } catch (IOException e) {
-                player.sendMessage(ChatColor.RED + "Error while saving to file!");
-                e.printStackTrace();
-            }
+            plugin.saveArenaConfig();
 
             // player.sendMessage(ChatColor.GREEN + "Saved " + stepName + "!");
 

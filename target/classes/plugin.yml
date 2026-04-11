@@ -13,3 +13,7 @@ commands:
     permission: op
     permission-message: "Warning: This Command is for Server OPs only!"
     usage: "/newgame <type_of_minigame> <name_of_your_arena>"
+  deletegame:
+    permission: op
+    permission-message: "Warning: This Command is for Server OPs only!"
+    usage: "/deletegame <name_of_existing_arena>"

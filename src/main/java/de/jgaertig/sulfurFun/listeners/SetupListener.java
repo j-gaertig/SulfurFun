@@ -62,4 +62,19 @@ public class SetupListener implements Listener {
         sessions.remove(uuid);
     }
 
+    public void stopSessionsForArena(String arenaName) {
+        // Wir schauen uns jeden Eintrag in der Map an
+        // Wir nutzen "removeIf", um alle zu entfernen, die zur Arena passen
+        sessions.entrySet().removeIf(entry -> {
+            boolean match = entry.getValue().getArenaName().equalsIgnoreCase(arenaName);
+            if (match) {
+                // Optional: Dem Spieler eine Nachricht schicken, dass abgebrochen wurde
+                org.bukkit.Bukkit.getPlayer(entry.getKey()).sendMessage(
+                        org.bukkit.ChatColor.RED + "The setup was cancelled because the arena was deleted."
+                );
+            }
+            return match;
+        });
+    }
+
 }
