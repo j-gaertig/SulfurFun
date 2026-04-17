@@ -1,6 +1,11 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![Release][release-shield]][release-url]
+<p align="center">
+  <img src="https://shields.io" alt="Java" />
+  <img src="https://shields.io" alt="Release" />
+  <img src="https://shields.io" alt="License" />
+</p>
+
+<p align="center">
+  <img src="https://shields.io" alt="Stars" />
+  <img src="https://shields.io" alt="Forks" />
+  <img src="https://shields.io" alt="Issues" />
+</p>
