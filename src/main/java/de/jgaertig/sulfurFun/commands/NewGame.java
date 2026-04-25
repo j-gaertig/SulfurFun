@@ -22,11 +22,17 @@ import java.util.UUID;
 
 public class NewGame implements CommandExecutor, TabCompleter {
 
+    private final SulfurFun plugin;
+
+    public SulfurFun getPlugin() {
+        return this.plugin;
+    }
+
     // Die Reihenfolge, in der der Spieler die Punkte abläuft
     private final String[] steps = {
             "bluegoal1", "bluegoal2", "blueplayerspawn",
             "redgoal1", "redgoal2", "redplayerspawn",
-            "ballspawn"
+            "ballspawn", "maxplayer"
     };
 
     // Nachrichten, die beim Fußball Arena Erstellen gebraucht werden
@@ -37,11 +43,10 @@ public class NewGame implements CommandExecutor, TabCompleter {
             "Right-click on the corner of the outer edge of the red team's goal.", // redgoal1
             "Right-click on the diagonally opposite corner of the red team's goal.", // redgoal2
             "Right-click on the spawn point where the red team's players spawn.", // redplayerspawn
-            "Right-click where the ball should spawn." // ballspawn
+            "Right-click where the ball should spawn.", // ballspawn
+            "Type the maximum amount of players into the chat." // maxplayers
     };
 
-
-    private final SulfurFun plugin;
     private SetupListener setupListener;
 
     public NewGame(SulfurFun plugin, SetupListener setupListener) {
@@ -111,10 +116,16 @@ public class NewGame implements CommandExecutor, TabCompleter {
     }
 
     public void handleSetupClick(Player player, Location loc) {
+
         SetupSession session = setupListener.getSession(player.getUniqueId());
         int currentStepIndex = session.getStep() - 1;
 
-        if (currentStepIndex < steps.length) {
+        if (currentStepIndex == 7) {
+            return;
+
+        }else {
+
+
             String stepName = steps[currentStepIndex];
             String path = session.getArenaName() + "." + stepName;
 
@@ -123,14 +134,18 @@ public class NewGame implements CommandExecutor, TabCompleter {
             plugin.getArenaConfig().set(path + ".y", loc.getBlockY());
             plugin.getArenaConfig().set(path + ".z", loc.getBlockZ());
 
-            // WICHTIG: Die Datei tatsächlich auf der Festplatte speichern
-            plugin.saveArenaConfig();
 
-            // player.sendMessage(ChatColor.GREEN + "Saved " + stepName + "!");
 
-            session.nextStep();
-            askNextStep(player, session);
+
         }
+
+        // WICHTIG: Die Datei tatsächlich auf der Festplatte speichern
+        plugin.saveArenaConfig();
+
+        // player.sendMessage(ChatColor.GREEN + "Saved " + stepName + "!");
+
+        session.nextStep();
+        askNextStep(player, session);
     }
 
     private void askNextStep(Player player, SetupSession session){
@@ -146,5 +161,23 @@ public class NewGame implements CommandExecutor, TabCompleter {
             // Hier könnten wir später die Session beenden
             setupListener.removePlayer(player.getUniqueId());
         }
+    }
+
+    public void handleMaxPlayersInput(Player player, int amount) {
+        // 1. Hol dir die Session des Spielers vom setupListener
+        SetupSession session = setupListener.getSession(player.getUniqueId());
+
+        // 2. Den Pfad für die Config erstellen (z.B. "meineArena.maxplayers")
+        String path = session.getArenaName() + ".maxplayers";
+
+        // 3. Den Wert 'amount' in die Config setzen
+        plugin.getArenaConfig().set(path, amount);
+
+        // 4. Die Config dauerhaft auf der Festplatte speichern
+        plugin.saveArenaConfig();
+
+        // 5. Die Session zum nächsten Schritt bewegen und askNextStep aufrufen
+        session.nextStep();
+        askNextStep(player, session);
     }
 }

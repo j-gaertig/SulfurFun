@@ -30,11 +30,11 @@ public final class SulfurFun extends JavaPlugin {
         }
         arenaConfig = YamlConfiguration.loadConfiguration(arenaFile);
 
-        NewGame newGameCommand = new NewGame(this, null);
+        SetupListener setupListener = new SetupListener();
 
-        SetupListener setupListener = new SetupListener(newGameCommand);
+        NewGame newGameCommand = new NewGame(this, setupListener);
 
-        newGameCommand.setSetupListener(setupListener);
+        setupListener.setNewGameCommand(newGameCommand);
 
         getCommand("newgame").setExecutor(newGameCommand);
         getCommand("newgame").setTabCompleter(newGameCommand);
