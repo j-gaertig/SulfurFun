@@ -3,10 +3,10 @@ description: $description
 version: '0.0.0-Experimental'
 
 main: de.jgaertig.sulfurFun.SulfurFun
-api-version: '26.1'
+api-version: '26.1.2'
 
 authors: [ j-gaertig ]
-website: https://github.com/j-gaertig/SulfurPlay
+website: https://github.com/j-gaertig/SulfurFun
 
 commands:
   newgame:
