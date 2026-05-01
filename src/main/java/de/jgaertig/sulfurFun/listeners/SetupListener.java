@@ -54,7 +54,7 @@ public class SetupListener implements Listener {
                 Player p = Bukkit.getPlayer(entry.getKey());
                 if (p != null) {
                     // Übersetzung nutzen 💬
-                    languageManager.send(p, "messages.deletegame.canclesetup");
+                    languageManager.send(p, "messages.deletegame.cancelsetup");
                 }
             }
             return match;

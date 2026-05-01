@@ -33,4 +33,4 @@ messages:
     arena: "&7アリーナ "
     deleted: " &e%name% &aが削除されました！"
     doesnotexist: "&cこのアリーナは存在しません。"
-    canclesetup: "&cアリーナが削除されたため、設定がキャンセルされました。"
+    cancelsetup: "&cアリーナが削除されたため、設定がキャンセルされました。"

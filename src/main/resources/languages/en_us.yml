@@ -33,4 +33,11 @@ messages:
     arena: "&7Arena "
     deleted: " &e%name% &ahas been deleted!"
     doesnotexist: "&cThis arena doesn't exist."
-    canclesetup: "&cThe setup was cancelled because the arena was deleted."
+    cancelsetup: "&cThe setup was cancelled because the arena was deleted."
+
+  joingame:
+    usage: "&eUsage: /joingame <type_of_minigame> <name_of_arena>"
+    notexist: "&cThis arena doesn't exist."
+    joined: "&aYou joined the arena &e%name%&a!"
+    forplayersonly: "&cThis Command is for players only!"
+    notfound: "&cNo arena of type &e%type% &cis available."

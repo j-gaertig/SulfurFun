@@ -1,6 +1,7 @@
 package de.jgaertig.sulfurFun;
 
 import de.jgaertig.sulfurFun.commands.DeleteGame;
+import de.jgaertig.sulfurFun.commands.JoinGame;
 import de.jgaertig.sulfurFun.commands.NewGame;
 import de.jgaertig.sulfurFun.listeners.SetupListener;
 import org.bukkit.Bukkit;
@@ -58,6 +59,8 @@ public final class SulfurFun extends JavaPlugin {
         // 2. Commands mit Manager erstellen
         NewGame newGameCommand = new NewGame(this, setupListener, this.languageManager);
         DeleteGame deleteGameCommand = new DeleteGame(this, setupListener, this.languageManager);
+        JoinGame joinGameCommand = new JoinGame(this, this.languageManager);
+        JoinGame joinGameCommand = new JoinGame(this, this.languageManager);
 
         // 3. Verknüpfung setzen
         setupListener.setNewGameCommand(newGameCommand);

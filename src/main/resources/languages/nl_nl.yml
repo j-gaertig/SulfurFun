@@ -33,4 +33,4 @@ messages:
     arena: "&7Arena "
     deleted: " &e%name% &ais verwijderd!"
     doesnotexist: "&cDeze arena bestaat niet."
-    canclesetup: "&cDe installatie is geannuleerd omdat de arena is verwijderd."
+    cancelsetup: "&cDe installatie is geannuleerd omdat de arena is verwijderd."

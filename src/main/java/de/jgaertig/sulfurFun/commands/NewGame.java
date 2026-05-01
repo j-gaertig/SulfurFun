@@ -47,7 +47,7 @@ public class NewGame implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
             // Konsole bekommt eine direkte Nachricht, da sie keine Locale hat
-            sender.sendMessage(ChatColor.YELLOW + "This command is for players only!");
+            languageManager.send(sender, "messages.newgame.forplayersonly");
             return false;
         }
 
