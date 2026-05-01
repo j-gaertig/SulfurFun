@@ -60,7 +60,6 @@ public final class SulfurFun extends JavaPlugin {
         NewGame newGameCommand = new NewGame(this, setupListener, this.languageManager);
         DeleteGame deleteGameCommand = new DeleteGame(this, setupListener, this.languageManager);
         JoinGame joinGameCommand = new JoinGame(this, this.languageManager);
-        JoinGame joinGameCommand = new JoinGame(this, this.languageManager);
 
         // 3. Verknüpfung setzen
         setupListener.setNewGameCommand(newGameCommand);
