@@ -1,26 +1,29 @@
 package de.jgaertig.sulfurFun.commands;
 
 import de.jgaertig.sulfurFun.SulfurFun;
-import org.bukkit.ChatColor;
+import de.jgaertig.sulfurFun.models.ArenaManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 public class JoinGame implements CommandExecutor {
 
      private final SulfurFun plugin;
      // Der Manager für die Sprachen 🌍
      private final SulfurFun.LanguageManager languageManager;
+     private final ArenaManager arenaManager;
 
      // Konstruktor angepasst
-     public JoinGame(SulfurFun plugin, SulfurFun.LanguageManager languageManager) {
+     public JoinGame(SulfurFun plugin, SulfurFun.LanguageManager languageManager, ArenaManager arenaManager) {
           this.plugin = plugin;
           this.languageManager = languageManager;
+          this.arenaManager = arenaManager;
      }
 
      @Override
@@ -32,6 +35,12 @@ public class JoinGame implements CommandExecutor {
           }
 
           Player player = (Player) sender;
+          UUID uuid = player.getUniqueId();
+
+          if (arenaManager.isAlreadyInGame(player.getUniqueId())) {
+               languageManager.send(player, "messages.joingame.alreadyplaying");
+               return true;
+          }
 
           if (args.length < 1 || args.length > 2) {
                languageManager.send(player, "messages.joingame.usage");
@@ -41,6 +50,8 @@ public class JoinGame implements CommandExecutor {
           String type = args[0].toLowerCase();
           String foundArena = null;
           List<String> candidates = new ArrayList<>();
+          List<String> emptycandidates = new ArrayList<>();
+          List<String> randomcandidates = new ArrayList<>();
 
           if (args.length == 2) {
                // Fall A: Name wurde mitgegeben
@@ -49,7 +60,9 @@ public class JoinGame implements CommandExecutor {
                     String arenaType = plugin.getArenaConfig().getString(name + ".type");
                     if (type.equalsIgnoreCase(arenaType)) {
                          foundArena = name;
+                         arenaManager.addToQueue(foundArena, uuid);
                     }
+
                } else {
                     languageManager.send(player, "messages.joingame.notexist");
                     return true;
@@ -67,13 +80,37 @@ public class JoinGame implements CommandExecutor {
                     languageManager.send(player, "messages.joingame.notfound");
                } else if (candidates.size() == 1) {
                     foundArena = candidates.get(0);
+                    arenaManager.addToQueue(foundArena, uuid);
                } else {
-                    // Hier muss jetzt das auswahl verfahren kommen
+                    for (String arenaName : candidates) {
+                         if (arenaManager.getQueueSize(arenaName) < arenaManager.getMaxPlayers(arenaName) * 2 && arenaManager.getQueueSize(arenaName) > 0) {
+                              foundArena = arenaName;
+                              arenaManager.addToQueue(foundArena, uuid);
+                              return true;
+                         } else if (arenaManager.getQueueSize(arenaName) == 0) {
+                              emptycandidates.add(arenaName);
+                         }
+                    }
+                    if (foundArena == null && !emptycandidates.isEmpty()) {
+                         Random random = new Random();
+                         int randomarena = random.nextInt(emptycandidates.size());
+                         foundArena = emptycandidates.get(randomarena);
+                         arenaManager.addToQueue(foundArena, uuid);
+                         return true;
+
+                    } else if (foundArena == null) {
+                         Random random = new Random();
+                         int randomarena = random.nextInt(candidates.size());
+                         foundArena = candidates.get(randomarena);
+                         arenaManager.addToQueue(foundArena, uuid);
+                         return true;
+
+                    }
                }
+
+
+
           }
-
-
-
           return true;
      }
 }

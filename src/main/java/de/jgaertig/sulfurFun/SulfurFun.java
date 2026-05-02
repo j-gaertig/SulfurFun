@@ -4,6 +4,7 @@ import de.jgaertig.sulfurFun.commands.DeleteGame;
 import de.jgaertig.sulfurFun.commands.JoinGame;
 import de.jgaertig.sulfurFun.commands.NewGame;
 import de.jgaertig.sulfurFun.listeners.SetupListener;
+import de.jgaertig.sulfurFun.models.ArenaManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -24,6 +25,7 @@ public final class SulfurFun extends JavaPlugin {
     private File arenaFile;
     private FileConfiguration arenaConfig;
     private LanguageManager languageManager;
+    private ArenaManager arenaManager;
 
     @Override
     public void onEnable() {
@@ -53,13 +55,22 @@ public final class SulfurFun extends JavaPlugin {
     }
 
     private void setupManagers() {
+
+        this.arenaManager = new ArenaManager();
+
+        if (arenaConfig != null) {
+            for (String arenaName : arenaConfig.getKeys(false)) {
+                int max = arenaConfig.getInt(arenaName + ".maxplayers");
+                arenaManager.loadArena(arenaName, max);
+            }
+        }
         // 1. Listener mit Manager erstellen
         SetupListener setupListener = new SetupListener(this.languageManager);
 
         // 2. Commands mit Manager erstellen
         NewGame newGameCommand = new NewGame(this, setupListener, this.languageManager);
         DeleteGame deleteGameCommand = new DeleteGame(this, setupListener, this.languageManager);
-        JoinGame joinGameCommand = new JoinGame(this, this.languageManager);
+        JoinGame joinGameCommand = new JoinGame(this, this.languageManager, this.arenaManager);
 
         // 3. Verknüpfung setzen
         setupListener.setNewGameCommand(newGameCommand);

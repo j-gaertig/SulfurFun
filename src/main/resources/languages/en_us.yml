@@ -41,3 +41,4 @@ messages:
     joined: "&aYou joined the arena &e%name%&a!"
     forplayersonly: "&cThis Command is for players only!"
     notfound: "&cNo arena of type &e%type% &cis available."
+    alreadyplaying: "&cYou are already playing in an arena! Please leave your current arena first."
