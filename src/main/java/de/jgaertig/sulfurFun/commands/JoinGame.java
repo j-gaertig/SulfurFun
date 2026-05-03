@@ -68,7 +68,9 @@ public class JoinGame implements CommandExecutor {
                     return true;
                }
           } else {
-               // Fall B: Nur Typ wurde mitgegeben (Deine Schleife!)
+
+               if (!plugin.getConfig().getBoolean("randomJoinGameCommandEnabled")) return true;
+
                for (String arenaName : plugin.getArenaConfig().getKeys(false)) {
                     String currentType = plugin.getArenaConfig().getString(arenaName + ".type");
                     if (currentType != null && currentType.equalsIgnoreCase(type)) {
@@ -76,40 +78,50 @@ public class JoinGame implements CommandExecutor {
                     }
                }
 
-               if (candidates.isEmpty()) {
-                    languageManager.send(player, "messages.joingame.notfound");
-               } else if (candidates.size() == 1) {
-                    foundArena = candidates.get(0);
-                    arenaManager.addToQueue(foundArena, uuid);
-               } else {
-                    for (String arenaName : candidates) {
-                         if (arenaManager.getQueueSize(arenaName) < arenaManager.getMaxPlayers(arenaName) * 2 && arenaManager.getQueueSize(arenaName) > 0) {
-                              foundArena = arenaName;
+               String mode = plugin.getConfig().getString("random-join-mode", "SMART");
+
+               if (mode.equalsIgnoreCase("SMART")) {
+                    if (candidates.isEmpty()) {
+                         languageManager.send(player, "messages.joingame.notfound");
+                    } else if (candidates.size() == 1) {
+                         foundArena = candidates.get(0);
+                         arenaManager.addToQueue(foundArena, uuid);
+                    } else {
+                         for (String arenaName : candidates) {
+                              if (arenaManager.getQueueSize(arenaName) < arenaManager.getMaxPlayers(arenaName) * 2 && arenaManager.getQueueSize(arenaName) > 0) {
+                                   foundArena = arenaName;
+                                   arenaManager.addToQueue(foundArena, uuid);
+                                   return true;
+                              } else if (arenaManager.getQueueSize(arenaName) == 0) {
+                                   emptycandidates.add(arenaName);
+                              }
+                         }
+                         if (foundArena == null && !emptycandidates.isEmpty()) {
+                              Random random = new Random();
+                              int randomarena = random.nextInt(emptycandidates.size());
+                              foundArena = emptycandidates.get(randomarena);
                               arenaManager.addToQueue(foundArena, uuid);
                               return true;
-                         } else if (arenaManager.getQueueSize(arenaName) == 0) {
-                              emptycandidates.add(arenaName);
+
+                         } else if (foundArena == null) {
+                              Random random = new Random();
+                              int randomarena = random.nextInt(candidates.size());
+                              foundArena = candidates.get(randomarena);
+                              arenaManager.addToQueue(foundArena, uuid);
+                              return true;
+
                          }
                     }
-                    if (foundArena == null && !emptycandidates.isEmpty()) {
+               } else {
+                    if (candidates.isEmpty()) {
+                         languageManager.send(player, "messages.joingame.notfound");
+                    } else {
+                         // REINER ZUFALL
                          Random random = new Random();
-                         int randomarena = random.nextInt(emptycandidates.size());
-                         foundArena = emptycandidates.get(randomarena);
+                         foundArena = candidates.get(random.nextInt(candidates.size()));
                          arenaManager.addToQueue(foundArena, uuid);
-                         return true;
-
-                    } else if (foundArena == null) {
-                         Random random = new Random();
-                         int randomarena = random.nextInt(candidates.size());
-                         foundArena = candidates.get(randomarena);
-                         arenaManager.addToQueue(foundArena, uuid);
-                         return true;
-
                     }
                }
-
-
-
           }
           return true;
      }

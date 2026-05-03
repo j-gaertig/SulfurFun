@@ -2,9 +2,11 @@ package de.jgaertig.sulfurFun;
 
 import de.jgaertig.sulfurFun.commands.DeleteGame;
 import de.jgaertig.sulfurFun.commands.JoinGame;
+import de.jgaertig.sulfurFun.commands.LeaveGame;
 import de.jgaertig.sulfurFun.commands.NewGame;
 import de.jgaertig.sulfurFun.listeners.SetupListener;
 import de.jgaertig.sulfurFun.models.ArenaManager;
+import de.jgaertig.sulfurFun.tasks.ActionbarTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -44,6 +46,9 @@ public final class SulfurFun extends JavaPlugin {
     public void onDisable() {}
 
     private void setupConfiguration() {
+
+        saveDefaultConfig();
+
         if (!getDataFolder().exists()) {
             getDataFolder().mkdirs();
         }
@@ -66,11 +71,15 @@ public final class SulfurFun extends JavaPlugin {
         }
         // 1. Listener mit Manager erstellen
         SetupListener setupListener = new SetupListener(this.languageManager);
+        ActionbarTask actionbarTask = new ActionbarTask(this, this.arenaManager);
 
         // 2. Commands mit Manager erstellen
         NewGame newGameCommand = new NewGame(this, setupListener, this.languageManager);
         DeleteGame deleteGameCommand = new DeleteGame(this, setupListener, this.languageManager);
         JoinGame joinGameCommand = new JoinGame(this, this.languageManager, this.arenaManager);
+        LeaveGame leaveGame = new LeaveGame(this.arenaManager, this.languageManager);
+
+        new ActionbarTask(this, this.arenaManager).runTaskTimer(this, 20L, 20L);
 
         // 3. Verknüpfung setzen
         setupListener.setNewGameCommand(newGameCommand);

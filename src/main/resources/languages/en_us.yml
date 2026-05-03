@@ -42,3 +42,7 @@ messages:
     forplayersonly: "&cThis Command is for players only!"
     notfound: "&cNo arena of type &e%type% &cis available."
     alreadyplaying: "&cYou are already playing in an arena! Please leave your current arena first."
+
+  leavegame:
+    success: "&aYou left the arena!"
+    notinqueue: "&cYou are not in a queue or arena!"

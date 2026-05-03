@@ -1,0 +1,20 @@
+# Config file for the plugin SulfurFun
+
+# Allows the random /joingame command to be executed:
+randomJoinGameCommandEnabled: true
+random-join-mode: SMART # Options: SMART, RANDOM
+
+# Custom action bar when player is in the queue:
+actionBar:
+  enabled: true
+  # Placeholders:
+  # %type% (type of minigame), %position% (player's position in the queue), %name% (name of the arena), %maxplayer% (number of players required for this arena),
+  # %players% (Current number of players in the queue to play next),
+  # %smartstatus% (It either shows player's position or, if it's player's turn next, the number of players available for the next game.
+  message: "%type% | Arena: %name% | Status: %smartstatus%"
+
+
+
+### WARNING: DANGEROUS SETTINGS BELOW! DO NOT CHANGE UNLESS YOU KNOW WHAT YOU ARE DOING! ###
+
+ConfigVersion: 1.0

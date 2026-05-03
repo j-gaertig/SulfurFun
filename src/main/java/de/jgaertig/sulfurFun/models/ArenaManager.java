@@ -18,43 +18,6 @@ public class ArenaManager {
         arenaMaxPlayers.put(name, max);
     }
 
-    // Wir brauchen den Arena-Namen und die maxPlayers als Zahl
-    public String getStatus(UUID uuid, String arenaName, int maxPlayers) {
-        int maxTotal = maxPlayers * 2;
-
-        // 1. Hol die Liste für diese spezifische Arena
-        List<UUID> arenaQueue = queue.get(arenaName);
-
-        // 2. Finde heraus, an welcher Stelle der Spieler steht (0, 1, 2...)
-        int position = arenaQueue.indexOf(uuid);
-        int realPosition = position + 1; // Für die Anzeige (1, 2, 3...)
-
-        // Jetzt die Entscheidung für die Actionbar
-        if (realPosition <= maxTotal) {
-            // Der Spieler ist einer derjenigen, die das Spiel voll machen
-            return realPosition + "/" + maxTotal + " Players";
-        } else {
-            // Der Spieler ist zu weit hinten in der Schlange
-            return "In Queue";
-        }
-    }
-
-    public QueueData getQueueData(UUID uuid, String arenaName) {
-        // 1. Sicherheit: Existiert die Arena überhaupt in der Warteschlange?
-        if (!queue.containsKey(arenaName)) return null;
-
-        List<UUID> arenaQueue = queue.get(arenaName);
-        int index = arenaQueue.indexOf(uuid);
-
-        // 2. Sicherheit: Ist der Spieler überhaupt in dieser Liste?
-        if (index == -1) return null;
-
-        // 3. Daten holen (maxPlayers wurde vorher per loadArena gespeichert)
-        int maxTotal = arenaMaxPlayers.getOrDefault(arenaName, 0) * 2;
-
-        return new QueueData(index + 1, maxTotal);
-    }
-
     public boolean isAlreadyInGame(UUID uuid) {
         // 1. Wir prüfen alle Warteschlangen
         for (List<UUID> queueList : queue.values()) {
@@ -77,6 +40,39 @@ public class ArenaManager {
     public int getMaxPlayers(String arenaName) {
         // Gibt den gespeicherten Wert zurück, oder 0, falls die Arena unbekannt ist
         return arenaMaxPlayers.getOrDefault(arenaName, 0);
+    }
+
+    public int getPosition(UUID uuid, String arenaName) {
+        List<UUID> spielerListe = queue.get(arenaName);
+
+        // Sicherheit: Falls die Arena oder die Liste nicht existiert
+        if (spielerListe == null) return -1;
+
+        int index = spielerListe.indexOf(uuid);
+
+        // Falls der Spieler in der Liste ist, gib index + 1 zurück, sonst -1
+        return (index != -1) ? (index + 1) : -1;
+    }
+
+    public void removePlayer(UUID uuid) {
+        // Aus allen Warteschlangen entfernen
+        for (List<UUID> q : queue.values()) {
+            q.remove(uuid);
+        }
+        // Aus allen aktiven Spielen entfernen
+        for (List<UUID> a : activePlayers.values()) {
+            a.remove(uuid);
+        }
+    }
+
+    public String getPlayerArena(UUID uuid) {
+        for (Map.Entry<String, List<UUID>> entry : queue.entrySet()) {
+            if (entry.getValue().contains(uuid)) return entry.getKey();
+        }
+        for (Map.Entry<String, List<UUID>> entry : activePlayers.entrySet()) {
+            if (entry.getValue().contains(uuid)) return entry.getKey();
+        }
+        return null;
     }
 
 }
