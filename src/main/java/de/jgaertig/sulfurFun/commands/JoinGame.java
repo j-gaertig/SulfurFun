@@ -31,7 +31,7 @@ public class JoinGame implements CommandExecutor {
 
           if (!(sender instanceof Player)) {
                languageManager.send(sender, "messages.joingame.forplayersonly");
-               return false;
+               return true;
           }
 
           Player player = (Player) sender;
@@ -44,7 +44,7 @@ public class JoinGame implements CommandExecutor {
 
           if (args.length < 1 || args.length > 2) {
                languageManager.send(player, "messages.joingame.usage");
-               return false;
+               return true;
           }
 
           String type = args[0].toLowerCase();

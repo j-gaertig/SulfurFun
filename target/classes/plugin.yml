@@ -1,6 +1,6 @@
 name: SulfurFun
 description: $description
-version: '0.0.2-Experimental'
+version: '0.0.3-Experimental'
 
 main: de.jgaertig.sulfurFun.SulfurFun
 api-version: '26.1.2'
@@ -17,3 +17,7 @@ commands:
     permission: op
     permission-message: "Warning: This Command is for Server OPs only!"
     usage: "/deletegame <name_of_existing_arena>"
+  joingame:
+    usage: "/joingame <type_of_minigame> <name_of_arena>"
+  leavegame:
+    usage: "/leavegame"

@@ -33,4 +33,4 @@ messages:
     arena: "&7竞技场 "
     deleted: " &e%name% &a已被删除！"
     doesnotexist: "&c此竞技场不存在。"
-    canclesetup: "&c由于竞技场已被删除，设置已取消。"
+    cancelsetup: "&c由于竞技场已被删除，设置已取消。"

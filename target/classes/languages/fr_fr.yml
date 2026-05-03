@@ -33,4 +33,4 @@ messages:
     arena: "&7Arène "
     deleted: " &e%name% &aa été supprimée !"
     doesnotexist: "&cCette arène n'existe pas."
-    canclesetup: "&cLa configuration a été annulée car l'arène a été supprimée."
+    cancelsetup: "&cLa configuration a été annulée car l'arène a été supprimée."

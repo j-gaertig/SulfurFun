@@ -18,5 +18,6 @@ commands:
     permission-message: "Warning: This Command is for Server OPs only!"
     usage: "/deletegame <name_of_existing_arena>"
   joingame:
-    permission: none
     usage: "/joingame <type_of_minigame> <name_of_arena>"
+  leavegame:
+    usage: "/leavegame"

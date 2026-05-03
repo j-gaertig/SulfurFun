@@ -89,6 +89,8 @@ public final class SulfurFun extends JavaPlugin {
         getCommand("newgame").setTabCompleter(newGameCommand);
         getCommand("deletegame").setExecutor(deleteGameCommand);
         getCommand("deletegame").setTabCompleter(deleteGameCommand);
+        getCommand("joingame").setExecutor(joinGameCommand);
+        getCommand("leavegame").setExecutor(leaveGame);
 
         getServer().getPluginManager().registerEvents(setupListener, this);
     }
@@ -170,7 +172,7 @@ public final class SulfurFun extends JavaPlugin {
                     configs.put(lang.replace(".yml", ""), config);
 
                 } catch (java.io.IOException e) {
-                    plugin.getLogger().severe("Konnte Sprache nicht laden: " + lang);
+                    plugin.getLogger().severe(": " + lang);
                 }
             }
         }

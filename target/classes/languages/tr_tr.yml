@@ -33,4 +33,4 @@ messages:
     arena: "&7Arena "
     deleted: " &e%name% &asilindi!"
     doesnotexist: "&cBu arena mevcut değil."
-    canclesetup: "&cArena silindiği için kurulum iptal edildi."
+    cancelsetup: "&cArena silindiği için kurulum iptal edildi."
