@@ -47,4 +47,4 @@ SulfurFun is designed, developed and maintained by **a single person**. If you e
 - [**Github:**](https://github.com/j-gaertig/SulfurFun) ⭐ Star the repository, 👁️ enable watch mode, and follow the developer
 
 
-Every bit of support keeps the project alive. Thank you! 🙏 
+Every bit of support keeps the project alive. Thank you! 🙏 |
