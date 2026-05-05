@@ -39,7 +39,7 @@ Set up arenas directly in-game, let players join via a queue system, and enjoy c
 
 ## 🙌 Support the Project
 
-SulfurFun is designed, developed and maintained by **a single person**. If you enjoy what this project is going for, please consider supporting it — it makes a huge difference.
+SulfurFun is designed, developed and maintained by **two person**. If you enjoy what this project is going for, please consider supporting it — it makes a huge difference.
 
 - [**Report Bugs**](https://github.com/j-gaertig/SulfurFun/issues) you find — every report helps
 - [**Modrinth:**](https://modrinth.com/plugin/sulfurfun) Give the project a ❤️ heart — it helps others discover it
