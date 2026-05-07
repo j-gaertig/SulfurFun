@@ -6,6 +6,7 @@ import de.jgaertig.sulfurFun.commands.LeaveGame;
 import de.jgaertig.sulfurFun.commands.NewGame;
 import de.jgaertig.sulfurFun.listeners.SetupListener;
 import de.jgaertig.sulfurFun.models.ArenaManager;
+import de.jgaertig.sulfurFun.models.GameManager;
 import de.jgaertig.sulfurFun.tasks.ActionbarTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,6 +29,7 @@ public final class SulfurFun extends JavaPlugin {
     private FileConfiguration arenaConfig;
     private LanguageManager languageManager;
     private ArenaManager arenaManager;
+    private GameManager gameManager;
 
     @Override
     public void onEnable() {
@@ -62,6 +64,7 @@ public final class SulfurFun extends JavaPlugin {
     private void setupManagers() {
 
         this.arenaManager = new ArenaManager();
+        this.gameManager = new GameManager(this.arenaManager);
 
         if (arenaConfig != null) {
             for (String arenaName : arenaConfig.getKeys(false)) {
@@ -74,10 +77,10 @@ public final class SulfurFun extends JavaPlugin {
         ActionbarTask actionbarTask = new ActionbarTask(this, this.arenaManager);
 
         // 2. Commands mit Manager erstellen
-        NewGame newGameCommand = new NewGame(this, setupListener, this.languageManager);
-        DeleteGame deleteGameCommand = new DeleteGame(this, setupListener, this.languageManager);
-        JoinGame joinGameCommand = new JoinGame(this, this.languageManager, this.arenaManager);
-        LeaveGame leaveGame = new LeaveGame(this.arenaManager, this.languageManager);
+        NewGame newGameCommand = new NewGame(this, setupListener, this.languageManager, this.gameManager);
+        DeleteGame deleteGameCommand = new DeleteGame(this, setupListener, this.languageManager, this.gameManager);
+        JoinGame joinGameCommand = new JoinGame(this, this.languageManager, this.arenaManager, this.gameManager);
+        LeaveGame leaveGame = new LeaveGame(this.arenaManager, this.languageManager, this.gameManager);
 
         new ActionbarTask(this, this.arenaManager).runTaskTimer(this, 20L, 20L);
 

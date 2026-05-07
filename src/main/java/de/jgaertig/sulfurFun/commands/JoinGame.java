@@ -2,6 +2,7 @@ package de.jgaertig.sulfurFun.commands;
 
 import de.jgaertig.sulfurFun.SulfurFun;
 import de.jgaertig.sulfurFun.models.ArenaManager;
+import de.jgaertig.sulfurFun.models.GameManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,12 +19,14 @@ public class JoinGame implements CommandExecutor {
      // Der Manager für die Sprachen 🌍
      private final SulfurFun.LanguageManager languageManager;
      private final ArenaManager arenaManager;
+     private final GameManager gameManager;
 
      // Konstruktor angepasst
-     public JoinGame(SulfurFun plugin, SulfurFun.LanguageManager languageManager, ArenaManager arenaManager) {
+     public JoinGame(SulfurFun plugin, SulfurFun.LanguageManager languageManager, ArenaManager arenaManager, GameManager gameManager) {
           this.plugin = plugin;
           this.languageManager = languageManager;
           this.arenaManager = arenaManager;
+          this.gameManager = gameManager;
      }
 
      @Override
@@ -37,7 +40,7 @@ public class JoinGame implements CommandExecutor {
           Player player = (Player) sender;
           UUID uuid = player.getUniqueId();
 
-          if (arenaManager.isAlreadyInGame(player.getUniqueId())) {
+          if (arenaManager.isAlreadyInGame(uuid) || gameManager.isPlayerInGame(uuid)) {
                languageManager.send(player, "messages.joingame.alreadyplaying");
                return true;
           }

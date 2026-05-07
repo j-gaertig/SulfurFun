@@ -4,7 +4,6 @@ import java.util.*;
 
 public class ArenaManager {
 
-    private final Map<String, List<UUID>> activePlayers = new HashMap<>();
     private final Map<String, List<UUID>> queue = new HashMap<>();
     private final Map<String, Integer> arenaMaxPlayers = new HashMap<>();
 
@@ -22,11 +21,6 @@ public class ArenaManager {
         // 1. Wir prüfen alle Warteschlangen
         for (List<UUID> queueList : queue.values()) {
             if (queueList.contains(uuid)) return true;
-        }
-
-        // 2. Wir prüfen alle aktiven Spiele
-        for (List<UUID> activeList : activePlayers.values()) {
-            if (activeList.contains(uuid)) return true;
         }
 
         return false;
@@ -59,20 +53,30 @@ public class ArenaManager {
         for (List<UUID> q : queue.values()) {
             q.remove(uuid);
         }
-        // Aus allen aktiven Spielen entfernen
-        for (List<UUID> a : activePlayers.values()) {
-            a.remove(uuid);
-        }
     }
 
     public String getPlayerArena(UUID uuid) {
         for (Map.Entry<String, List<UUID>> entry : queue.entrySet()) {
             if (entry.getValue().contains(uuid)) return entry.getKey();
         }
-        for (Map.Entry<String, List<UUID>> entry : activePlayers.entrySet()) {
-            if (entry.getValue().contains(uuid)) return entry.getKey();
-        }
         return null;
+    }
+
+    public List<UUID> pollPlayersForStart(String arenaName) {
+        List<UUID> fullQueue = queue.get(arenaName);
+        int required = getMaxPlayers(arenaName) * 2; // z.B. 2 gegen 2 = 4 Spieler
+
+        if (fullQueue == null || fullQueue.size() < required) {
+            return new ArrayList<>(); // Nicht genug Spieler da
+        }
+
+        // Wir nehmen die ersten 'required' Spieler
+        List<UUID> startingPlayers = new ArrayList<>(fullQueue.subList(0, required));
+
+        // Wir entfernen diese Spieler aus der Original-Warteschlange
+        fullQueue.removeAll(startingPlayers);
+
+        return startingPlayers;
     }
 
 }
