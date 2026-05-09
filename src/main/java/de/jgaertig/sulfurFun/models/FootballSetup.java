@@ -53,7 +53,7 @@ public class FootballSetup implements GameSetup {
                 "^(yes|no)$",
                 "^(yes|no)$",
                 "^(yes|no)$",
-                "^[5-9]|[1-9][0-9]+$",
+                "^[0-9]|[1-9][0-9]+$",
                 "^[0-9]+$"
         };
     }
