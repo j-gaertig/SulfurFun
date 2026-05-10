@@ -68,7 +68,7 @@ public final class SulfurFun extends JavaPlugin {
 
         if (arenaConfig != null) {
             for (String arenaName : arenaConfig.getKeys(false)) {
-                int max = arenaConfig.getInt(arenaName + ".maxplayers");
+                int max = arenaConfig.getInt(arenaName + ".maxplayer");
                 arenaManager.loadArena(arenaName, max);
             }
         }

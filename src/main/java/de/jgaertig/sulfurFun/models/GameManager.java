@@ -38,11 +38,15 @@ public class GameManager {
     }
 
     public void tryToStartGame(String arenaName) {
+        Bukkit.broadcastMessage("§7[Debug] Prüfe Start für Arena: " + arenaName); // Test-Nachricht
         List<UUID> players = arenaManager.pollPlayersForStart(arenaName);
-        if (!players.isEmpty()) {
-            distributeTeams(players, arenaName);
 
+        if (!players.isEmpty()) {
+            Bukkit.broadcastMessage("§a[Debug] Genug Spieler! Starte Countdown...");
+            distributeTeams(players, arenaName);
             startLobbyCountdown(arenaName);
+        } else {
+            Bukkit.broadcastMessage("§c[Debug] Noch nicht genug Spieler.");
         }
     }
 
@@ -148,7 +152,7 @@ public class GameManager {
         ball.setSize(1);
         ball.setCustomName("§8BALL_" + arenaName);
         ball.setCustomNameVisible(false);
-        ball.setAI(false);
+        //ball.setAI(false);
         ball.setInvulnerable(true);
 
         // --- SPÄTER: SULFUR CUBE SPAWN (Einfach auskommentieren) ---

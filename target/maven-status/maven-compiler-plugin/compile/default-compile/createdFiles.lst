@@ -2,13 +2,17 @@ de\jgaertig\sulfurFun\models\QueueData.class
 de\jgaertig\sulfurFun\commands\DeleteGame.class
 de\jgaertig\sulfurFun\models\FootballSetup.class
 de\jgaertig\sulfurFun\models\ArenaManager.class
+de\jgaertig\sulfurFun\models\GameManager$1.class
 de\jgaertig\sulfurFun\commands\JoinGame.class
 de\jgaertig\sulfurFun\models\SetupSession.class
 de\jgaertig\sulfurFun\commands\LeaveGame.class
 de\jgaertig\sulfurFun\models\GameSetup.class
 de\jgaertig\sulfurFun\models\GameSetup$StepType.class
 de\jgaertig\sulfurFun\SulfurFun$LanguageManager.class
+de\jgaertig\sulfurFun\models\GameManager$2.class
 de\jgaertig\sulfurFun\listeners\SetupListener.class
 de\jgaertig\sulfurFun\commands\NewGame.class
+de\jgaertig\sulfurFun\models\GameManager.class
 de\jgaertig\sulfurFun\SulfurFun.class
 de\jgaertig\sulfurFun\tasks\ActionbarTask.class
+de\jgaertig\sulfurFun\models\GameManager$3.class
