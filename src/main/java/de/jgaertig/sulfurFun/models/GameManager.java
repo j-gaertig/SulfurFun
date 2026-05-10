@@ -8,6 +8,7 @@ import org.bukkit.entity.Slime;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -24,6 +25,12 @@ public class GameManager {
     private final Map<UUID, Integer> savedFood = new HashMap<>();
     private final Map<UUID, String> playerTeams = new HashMap<>();
     private final Map<String, List<UUID>> activeArenaPlayers = new HashMap<>();
+    private final Map<String, String> arenaState = new HashMap<>();
+    private final Map<String, Integer> blueScore = new HashMap<>();
+    private final Map<String, Integer> redScore = new HashMap<>();
+    private final Map<String, Integer> gameTime = new HashMap<>();
+    private final Map<String, Integer> countdownTasks = new HashMap<>();
+    private final Map<String, Integer> activeCountdowns = new HashMap<>();
 
     public GameManager(SulfurFun plugin, ArenaManager arenaManager) {
         this.plugin = plugin;
@@ -34,8 +41,8 @@ public class GameManager {
         List<UUID> players = arenaManager.pollPlayersForStart(arenaName);
         if (!players.isEmpty()) {
             distributeTeams(players, arenaName);
-            // Später: Teleport & Ballspawn
-            spawnBall(arenaName);
+
+            startLobbyCountdown(arenaName);
         }
     }
 
@@ -174,10 +181,10 @@ public class GameManager {
         return null;
     }
 
-    public String goaldetection(String arenaName, World world) {
+    public void goaldetection(String arenaName, World world) {
         // 1. Ball suchen (Deine Hilfsmethode nutzen)
         Entity ball = getBall(arenaName, world);
-        if (ball == null) return "nix"; // Sicherheit: Falls kein Ball da ist
+        if (ball == null) return;
 
         // 2. Koordinaten aus der Config laden (für Blau)
         double bc1x = plugin.getArenaConfig().getDouble(arenaName + ".bluegoal1.x");
@@ -204,16 +211,204 @@ public class GameManager {
         if (bx <= Math.max(bc1x, bc2x) && bx >= Math.min(bc1x, bc2x) &&
                 by <= Math.max(bc1y, bc2y) && by >= Math.min(bc1y, bc2y) &&
                 bz <= Math.max(bc1z, bc2z) && bz >= Math.min(bc1z, bc2z)) {
-            return "Blue1";
+            bluegoal(arenaName);
         }
 
         // 5. Check für Rot
         if (bx <= Math.max(rc1x, rc2x) && bx >= Math.min(rc1x, rc2x) &&
                 by <= Math.max(rc1y, rc2y) && by >= Math.min(rc1y, rc2y) &&
                 bz <= Math.max(rc1z, rc2z) && bz >= Math.min(rc1z, rc2z)) {
-            return "Red1";
+            redgoal(arenaName);
+        }
+    }
+
+
+    public void setStatus(String arenaName, String status) {
+        arenaState.put(arenaName, status);
+    }
+
+    public String getStatus(String arenaName) {
+        return arenaState.getOrDefault(arenaName, "LOBBY");
+    }
+
+    public int getBlueScore(String arenaName) {
+        return blueScore.getOrDefault(arenaName, 0);
+    }
+
+    public int getRedScore(String arenaName) {
+        return redScore.getOrDefault(arenaName, 0);
+    }
+
+    public int getTime(String arenaName) {
+        return gameTime.getOrDefault(arenaName, 0);
+    }
+
+    public void bluegoal(String arenaName) {
+        blueScore.put(arenaName, blueScore.getOrDefault(arenaName, 0) + 1);
+    }
+
+    public void redgoal(String arenaName) {
+        redScore.put(arenaName, redScore.getOrDefault(arenaName, 0) + 1);
+    }
+
+    public int getCountdown(String arenaName) {
+        // Wenn nichts eingestellt ist, nehmen wir 10 als Standard
+        return plugin.getArenaConfig().getInt(arenaName + ".countdown", 3);
+    }
+
+
+    public void startGame(String arenaName) {
+
+        gameTime.put(arenaName, getGameDuration(arenaName));
+        // 1. Status auf INGAME setzen, damit die Actionbar bescheid weiß
+        setStatus(arenaName, "INGAME");
+
+        // 2. Den Ball für diese Arena spawnen
+        spawnBall(arenaName);
+
+        // 3. Alle Spieler der Arena durchgehen und teleportieren
+        List<UUID> players = activeArenaPlayers.get(arenaName);
+        for (UUID uuid : players) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player == null) continue;
+
+            // Hier nutzen wir die playerTeams Map!
+            String team = playerTeams.get(uuid);
+
+            // Den richtigen Spawn-Pfad aus der Config holen
+            String path = arenaName + "." + (team.equals("blue") ? "blueplayerspawn" : "redplayerspawn");
+
+            double x = plugin.getArenaConfig().getDouble(path + ".x");
+            double y = plugin.getArenaConfig().getDouble(path + ".y");
+            double z = plugin.getArenaConfig().getDouble(path + ".z");
+            String worldName = plugin.getArenaConfig().getString(path + ".world");
+            Location spawnLoc = new Location(Bukkit.getWorld(worldName), x + 0.5, y, z + 0.5);
+
+            player.teleport(spawnLoc);
+
+            player.sendMessage("§aDas Spiel beginnt! Viel Glück für Team " + team);
         }
 
-        return "nix";
+        String worldName = plugin.getArenaConfig().getString(arenaName + ".ballspawn.world");
+        World world = Bukkit.getWorld(worldName);
+
+        if (world != null) {
+            startGameLoop(arenaName, world);
+        }
+    }
+
+    public void startLobbyCountdown(String arenaName) {
+        setStatus(arenaName, "STARTING");
+        int seconds = getCountdown(arenaName);
+
+        // Initialwert in die Map schreiben
+        activeCountdowns.put(arenaName, seconds);
+
+        new BukkitRunnable() {
+            int remaining = seconds;
+
+            @Override
+            public void run() {
+                if (!getStatus(arenaName).equals("STARTING")) {
+                    activeCountdowns.remove(arenaName); // Aufräumen
+                    this.cancel();
+                    return;
+                }
+
+                if (remaining > 0) {
+                    remaining--;
+                    // Den aktuellen Wert für die Actionbar speichern
+                    activeCountdowns.put(arenaName, remaining);
+                } else {
+                    activeCountdowns.remove(arenaName); // Fertig
+                    startGame(arenaName);
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(plugin, 0L, 20L);
+    }
+
+    public int getActiveCountdown(String arenaName) {
+        return activeCountdowns.getOrDefault(arenaName, 0);
+    }
+
+
+    public void startGameLoop(String arenaName, World world) {
+        new BukkitRunnable() {
+            int ticks = 0;
+
+            @Override
+            public void run() {
+                // 1. Abbruchbedingung: Falls Arena nicht mehr INGAME ist (z.B. durch Stop-Befehl)
+                if (!getStatus(arenaName).equals("INGAME")) {
+                    this.cancel();
+                    return;
+                }
+
+                // 2. Torerkennung (Jeden Tick!)
+                goaldetection(arenaName, world);
+
+                // 3. Zeit-Check (Alle 20 Ticks = 1 Sekunde)
+                ticks++;
+                if (ticks >= 20) {
+                    ticks = 0;
+                    updateGameTime(arenaName);
+                }
+            }
+        }.runTaskTimer(plugin, 0L, 1L); // 1L bedeutet: Wiederhole jeden Tick
+    }
+
+    public void stopGame(String arenaName, World world) {
+        // 1. Gewinner ermitteln & Nachricht senden
+        // ... (dein Code für die Nachricht)
+
+        // 2. Spieler zurücksetzen (In der Schleife)
+        List<UUID> players = new ArrayList<>(activeArenaPlayers.getOrDefault(arenaName, new ArrayList<>()));
+        for (UUID uuid : players) {
+            Player p = Bukkit.getPlayer(uuid);
+            if (p != null) {
+                removePlayerFromGame(uuid, p);
+                p.sendMessage("§aDas Spiel ist vorbei!");
+            }
+        }
+
+        // 3. Ball & Daten löschen (AUSSERHALB der Schleife)
+        Entity ball = getBall(arenaName, world);
+        if (ball != null) ball.remove();
+
+        blueScore.remove(arenaName);
+        redScore.remove(arenaName);
+        activeArenaPlayers.remove(arenaName);
+
+        // 4. Nur EIN Timer für alle
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                setStatus(arenaName, "LOBBY");
+            }
+        }.runTaskLater(plugin, 100L);
+    }
+
+    public void updateGameTime(String arenaName) {
+        int currentTime = getTime(arenaName);
+
+        if (currentTime > 0) {
+            // Die Zeit um 1 verringern
+            gameTime.put(arenaName, currentTime - 1);
+        } else {
+            // Zeit ist abgelaufen!
+            // Wir brauchen hier die Welt, um den Ball zu finden
+            String worldName = plugin.getArenaConfig().getString(arenaName + ".ballspawn.world");
+            World world = Bukkit.getWorld(worldName);
+
+            if (world != null) {
+                stopGame(arenaName, world);
+            }
+        }
+    }
+
+    public int getGameDuration(String arenaName) {
+        // Standardmäßig 300 Sekunden, falls nichts in der Config steht
+        return plugin.getArenaConfig().getInt(arenaName + ".duration", 300);
     }
 }

@@ -2,6 +2,7 @@ package de.jgaertig.sulfurFun.tasks;
 
 import de.jgaertig.sulfurFun.SulfurFun;
 import de.jgaertig.sulfurFun.models.ArenaManager;
+import de.jgaertig.sulfurFun.models.GameManager;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -12,10 +13,12 @@ public class ActionbarTask extends BukkitRunnable {
 
     private final SulfurFun plugin;
     private final ArenaManager arenaManager;
+    private final GameManager gameManager;
 
-    public ActionbarTask(SulfurFun plugin, ArenaManager arenaManager) {
+    public ActionbarTask(SulfurFun plugin, ArenaManager arenaManager, GameManager gameManager) {
         this.plugin = plugin;
         this.arenaManager = arenaManager;
+        this.gameManager = gameManager;
     }
 
     @Override
@@ -64,7 +67,17 @@ public class ActionbarTask extends BukkitRunnable {
             }
         }
 
-        // 3. Ersetzen
+        if (gameManager.getStatus(arenaName).equals("INGAME")) {
+            int blue = gameManager.getBlueScore(arenaName);
+            int red = gameManager.getRedScore(arenaName);
+            int minutes = gameManager.getTime(arenaName) / 60;
+            int seconds = gameManager.getTime(arenaName) % 60;
+            return "§b" + blue + " §7: §c" + red + "§7 | " + minutes + "min " + seconds + "s left";
+        } else if (gameManager.getStatus(arenaName).equals("STARTING")) {
+            int seconds = gameManager.getActiveCountdown(arenaName);
+            return "§eStartet in: §6" + seconds + "s";
+        }
+
         return message
                 .replace("%type%", type)
                 .replace("%name%", arenaName)

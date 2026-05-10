@@ -64,7 +64,7 @@ public final class SulfurFun extends JavaPlugin {
     private void setupManagers() {
 
         this.arenaManager = new ArenaManager();
-        this.gameManager = new GameManager(this.arenaManager);
+        this.gameManager = new GameManager(this, arenaManager);
 
         if (arenaConfig != null) {
             for (String arenaName : arenaConfig.getKeys(false)) {
@@ -74,15 +74,15 @@ public final class SulfurFun extends JavaPlugin {
         }
         // 1. Listener mit Manager erstellen
         SetupListener setupListener = new SetupListener(this.languageManager);
-        ActionbarTask actionbarTask = new ActionbarTask(this, this.arenaManager);
+        ActionbarTask actionbarTask = new ActionbarTask(this, this.arenaManager, this.gameManager);
 
         // 2. Commands mit Manager erstellen
-        NewGame newGameCommand = new NewGame(this, setupListener, this.languageManager, this.gameManager);
-        DeleteGame deleteGameCommand = new DeleteGame(this, setupListener, this.languageManager, this.gameManager);
+        NewGame newGameCommand = new NewGame(this, setupListener, this.languageManager);
+        DeleteGame deleteGameCommand = new DeleteGame(this, setupListener, this.languageManager);
         JoinGame joinGameCommand = new JoinGame(this, this.languageManager, this.arenaManager, this.gameManager);
-        LeaveGame leaveGame = new LeaveGame(this.arenaManager, this.languageManager, this.gameManager);
+        LeaveGame leaveGame = new LeaveGame(this.arenaManager, this.languageManager);
 
-        new ActionbarTask(this, this.arenaManager).runTaskTimer(this, 20L, 20L);
+        new ActionbarTask(this, this.arenaManager, this.gameManager).runTaskTimer(this, 20L, 20L);
 
         // 3. Verknüpfung setzen
         setupListener.setNewGameCommand(newGameCommand);

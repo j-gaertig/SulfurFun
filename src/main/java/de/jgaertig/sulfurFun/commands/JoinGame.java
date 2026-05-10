@@ -64,6 +64,7 @@ public class JoinGame implements CommandExecutor {
                     if (type.equalsIgnoreCase(arenaType)) {
                          foundArena = name;
                          arenaManager.addToQueue(foundArena, uuid);
+                         gameManager.tryToStartGame(foundArena);
                     }
 
                } else {
@@ -89,11 +90,13 @@ public class JoinGame implements CommandExecutor {
                     } else if (candidates.size() == 1) {
                          foundArena = candidates.get(0);
                          arenaManager.addToQueue(foundArena, uuid);
+                         gameManager.tryToStartGame(foundArena);
                     } else {
                          for (String arenaName : candidates) {
                               if (arenaManager.getQueueSize(arenaName) < arenaManager.getMaxPlayers(arenaName) * 2 && arenaManager.getQueueSize(arenaName) > 0) {
                                    foundArena = arenaName;
                                    arenaManager.addToQueue(foundArena, uuid);
+                                   gameManager.tryToStartGame(foundArena);
                                    return true;
                               } else if (arenaManager.getQueueSize(arenaName) == 0) {
                                    emptycandidates.add(arenaName);
@@ -104,6 +107,7 @@ public class JoinGame implements CommandExecutor {
                               int randomarena = random.nextInt(emptycandidates.size());
                               foundArena = emptycandidates.get(randomarena);
                               arenaManager.addToQueue(foundArena, uuid);
+                              gameManager.tryToStartGame(foundArena);
                               return true;
 
                          } else if (foundArena == null) {
@@ -111,6 +115,7 @@ public class JoinGame implements CommandExecutor {
                               int randomarena = random.nextInt(candidates.size());
                               foundArena = candidates.get(randomarena);
                               arenaManager.addToQueue(foundArena, uuid);
+                              gameManager.tryToStartGame(foundArena);
                               return true;
 
                          }
@@ -123,6 +128,7 @@ public class JoinGame implements CommandExecutor {
                          Random random = new Random();
                          foundArena = candidates.get(random.nextInt(candidates.size()));
                          arenaManager.addToQueue(foundArena, uuid);
+                         gameManager.tryToStartGame(foundArena);
                     }
                }
           }
