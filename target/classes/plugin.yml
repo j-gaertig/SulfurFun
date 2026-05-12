@@ -1,6 +1,6 @@
 name: SulfurFun
 description: $description
-version: '${version}'
+version: '0.0.3-Experimental'
 
 main: de.jgaertig.sulfurFun.SulfurFun
 api-version: '26.1.2'
