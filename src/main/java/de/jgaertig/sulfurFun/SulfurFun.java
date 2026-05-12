@@ -120,7 +120,6 @@ public final class SulfurFun extends JavaPlugin {
                     plugin.saveResource("languages/" + lang, false);
                 }
 
-                // Hier kommt die Änderung:
                 try (java.io.InputStreamReader reader = new java.io.InputStreamReader(
                         new java.io.FileInputStream(file), java.nio.charset.StandardCharsets.UTF_8)) {
 
