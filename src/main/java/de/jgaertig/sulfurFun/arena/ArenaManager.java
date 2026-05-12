@@ -26,7 +26,6 @@ public class ArenaManager {
     }
 
     public void joinArena(Mode mode, Player player){
-        // check ob player in aktivem game oder in gleichem spielmodus schon wartend
     }
 
     private void loadArenasFromConfig(){
