@@ -15,7 +15,7 @@ Set up arenas directly in-game, let players join via a queue system, and enjoy c
 
 - 🛠️ **In-game arena setup** — Guided step-by-step chat wizard to place goals, ball spawn and player spawns for your Football arena — without ever touching a config file
 - ⚙️ **Admin commands** — `/newgame` to create arenas, `/deletegame` to remove them
-- 🌍 **Multi-language support** — English, German, Spanish, French, Italian, Japanese, Dutch, Polish, Portuguese (Brazilian), Russian, Turkish, Chinese (Simplified)
+- 🌍 **Multi-language support** — English, German (more coming soon)
 
 > 🏟️ Football arenas can already be fully configured — gameplay itself is coming very soon!
 
