@@ -23,6 +23,7 @@ public class JoinGameCommand implements CommandExecutor {
             languageManager.send(sender, "messages.forplayersonly");
             return false;
         }
+
         Player player = (Player) sender;
         if (args.length == 0){
             join(player);

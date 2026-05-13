@@ -12,8 +12,8 @@ import java.util.List;
 
 public class ArenaManager {
 
-    private JavaPlugin plugin;
-    private SulfurFun.LanguageManager languageManager;
+    private final JavaPlugin plugin;
+    private final SulfurFun.LanguageManager languageManager;
     private File arenasFile;
     private YamlConfiguration arenasConfig;
 

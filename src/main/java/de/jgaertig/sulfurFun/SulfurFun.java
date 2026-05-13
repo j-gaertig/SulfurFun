@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +28,7 @@ public final class SulfurFun extends JavaPlugin {
         setupConfiguration();
         this.languageManager = new LanguageManager(this);
         setupGameSystem();
+        registerCommandsAndListeners();
         sendEnableMessage();
     }
 
@@ -36,10 +36,6 @@ public final class SulfurFun extends JavaPlugin {
             "football",Mode.FOOTBALL,
             "hockey",Mode.HOCKEY
     ));
-
-    public LanguageManager getLanguageManager() {
-        return languageManager;
-    }
 
     @Override
     public void onDisable() {}
@@ -54,13 +50,12 @@ public final class SulfurFun extends JavaPlugin {
     }
 
     private void setupGameSystem() {
-        this.arenaManager = new ArenaManager(this,languageManager);
-        this.gameManager = new GameManager(this,languageManager);
-        registerCommandsAndListeners();
+        this.arenaManager = new ArenaManager(this, languageManager);
+        this.gameManager = new GameManager(this, languageManager);
     }
 
     public void registerCommandsAndListeners(){
-        getCommand("football").setExecutor(new JoinFootballCommand(this, languageManager,arenaManager));
+        getCommand("football").setExecutor(new JoinFootballCommand(this, languageManager, arenaManager));
     }
 
     private void sendEnableMessage() {
@@ -90,7 +85,11 @@ public final class SulfurFun extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("");
     }
 
-    public class LanguageManager {
+    public LanguageManager getLanguageManager() {
+        return languageManager;
+    }
+
+    public static class LanguageManager {
         private final JavaPlugin plugin;
         private final Map<String, FileConfiguration> configs = new HashMap<>();
 
