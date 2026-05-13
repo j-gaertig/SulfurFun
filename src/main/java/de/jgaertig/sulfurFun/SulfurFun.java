@@ -2,6 +2,7 @@ package de.jgaertig.sulfurFun;
 
 import de.jgaertig.sulfurFun.arena.ArenaManager;
 import de.jgaertig.sulfurFun.commands.JoinFootballCommand;
+import de.jgaertig.sulfurFun.commands.NewArenaCommand;
 import de.jgaertig.sulfurFun.game.GameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +29,7 @@ public final class SulfurFun extends JavaPlugin {
         setupConfiguration();
         this.languageManager = new LanguageManager(this);
         setupGameSystem();
+        registerCommandsAndListeners();
         sendEnableMessage();
     }
 
@@ -36,10 +37,6 @@ public final class SulfurFun extends JavaPlugin {
             "football",Mode.FOOTBALL,
             "hockey",Mode.HOCKEY
     ));
-
-    public LanguageManager getLanguageManager() {
-        return languageManager;
-    }
 
     @Override
     public void onDisable() {}
@@ -54,13 +51,13 @@ public final class SulfurFun extends JavaPlugin {
     }
 
     private void setupGameSystem() {
-        this.arenaManager = new ArenaManager(this,languageManager);
-        this.gameManager = new GameManager(this,languageManager);
-        registerCommandsAndListeners();
+        this.arenaManager = new ArenaManager(this, languageManager);
+        this.gameManager = new GameManager(this, languageManager);
     }
 
     public void registerCommandsAndListeners(){
-        getCommand("football").setExecutor(new JoinFootballCommand(this, languageManager,arenaManager));
+        getCommand("football").setExecutor(new JoinFootballCommand(this, languageManager, arenaManager));
+        getCommand("newgame").setExecutor(new NewArenaCommand(this, languageManager));
     }
 
     private void sendEnableMessage() {
@@ -90,7 +87,11 @@ public final class SulfurFun extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("");
     }
 
-    public class LanguageManager {
+    public LanguageManager getLanguageManager() {
+        return languageManager;
+    }
+
+    public static class LanguageManager {
         private final JavaPlugin plugin;
         private final Map<String, FileConfiguration> configs = new HashMap<>();
 
@@ -101,18 +102,8 @@ public final class SulfurFun extends JavaPlugin {
 
         public void loadLanguages() {
             List<String> languages = Arrays.asList(
-                    "en_us.yml", // Englisch (USA)
-                    "de_de.yml", // Deutsch
-                    "es_es.yml", // Spanisch (Spanien)
-                    "fr_fr.yml", // Französisch (Frankreich)
-                    "ru_ru.yml", // Russisch
-                    "pt_br.yml", // Portugiesisch (Brasilien)
-                    "zh_cn.yml", // Chinesisch (Vereinfacht)
-                    "it_it.yml", // Italienisch
-                    "pl_pl.yml", // Polnisch
-                    "nl_nl.yml", // Niederländisch
-                    "tr_tr.yml", // Türkisch
-                    "ja_jp.yml"  // Japanisch
+                    "en_us.yml",
+                    "de_de.yml"
             );
             for (String lang : languages) {
                 File file = new File(plugin.getDataFolder(), "languages/" + lang);

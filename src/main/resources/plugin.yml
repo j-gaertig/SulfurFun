@@ -11,3 +11,6 @@ website: https://github.com/j-gaertig/SulfurFun
 commands:
   football:
     usage: /football
+  newarena:
+    usage: /newgame <gamemode>
+    permission: operator
