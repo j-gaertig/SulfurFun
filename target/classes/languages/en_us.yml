@@ -1,5 +1,6 @@
 messages:
   prefix: "&8[&bSulfurFun&8] "
+  forplayersonly: "&cThis Command is for players only!"
   newgame:
     warning: "&eWarning: "
     forplayersonly: "&cThis Command is for players only!"
@@ -25,7 +26,7 @@ messages:
       step11: "&7Allow players to touch the ball with hands? &e(yes/no)"
       step12: "&7Allow breaking blocks? &e(Warning: You need a repair system!) (yes/no)"
       step13: "&7Allow placing blocks? &e(Warning: Risk of sabotage/blocking goals!) (yes/no)"
-      step14: "&7How many seconds should the countdown take before the match starts? &e(5 or more)"
+      step14: "&7How many seconds should the countdown take before the match starts? &e(0 or more)"
       step15: "&7How many goals are needed to win instantly? &e(0 for no limit, only time)"
 
   deletegame:

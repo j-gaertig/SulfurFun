@@ -9,15 +9,5 @@ authors: [ j-gaertig ]
 website: https://github.com/j-gaertig/SulfurFun
 
 commands:
-  newgame:
-    permission: op
-    permission-message: "Warning: This Command is for Server OPs only!"
-    usage: "/newgame <type_of_minigame> <name_of_your_arena>"
-  deletegame:
-    permission: op
-    permission-message: "Warning: This Command is for Server OPs only!"
-    usage: "/deletegame <name_of_existing_arena>"
-  joingame:
-    usage: "/joingame <type_of_minigame> <name_of_arena>"
-  leavegame:
-    usage: "/leavegame"
+  football:
+    usage: /football
