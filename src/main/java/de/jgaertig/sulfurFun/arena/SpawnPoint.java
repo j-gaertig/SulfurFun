@@ -1,9 +1,9 @@
 package de.jgaertig.sulfurFun.arena;
 
 public class SpawnPoint {
-    int  x, y, z;
+    double x, y, z;
 
-    public SpawnPoint(int x, int y, int z) {
+    public SpawnPoint(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;

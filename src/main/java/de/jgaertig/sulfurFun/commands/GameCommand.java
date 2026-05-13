@@ -7,12 +7,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-public class JoinGameCommand implements CommandExecutor {
+public class GameCommand implements CommandExecutor {
 
     private Plugin plugin;
     private SulfurFun.LanguageManager languageManager;
 
-    public JoinGameCommand(Plugin plugin, SulfurFun.LanguageManager languageManager) {
+    public GameCommand(Plugin plugin, SulfurFun.LanguageManager languageManager) {
         this.plugin = plugin;
         this.languageManager = languageManager;
     }
@@ -20,19 +20,15 @@ public class JoinGameCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
         if(!(sender instanceof Player)){
-            languageManager.send(sender, "messages.forplayersonly");
+            languageManager.send(sender, "for_players_only");
             return false;
         }
-
         Player player = (Player) sender;
-        if (args.length == 0){
-            join(player);
-            return true;
-        }else{
-
-        }
-        return true;
+        return command(player, args);
     }
 
-    public void join(Player player){}
+    public boolean command(Player player, String[] args){
+        // to override!
+        return false;
+    }
 }

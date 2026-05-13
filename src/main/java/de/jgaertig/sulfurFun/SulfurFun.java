@@ -1,7 +1,7 @@
 package de.jgaertig.sulfurFun;
 
 import de.jgaertig.sulfurFun.arena.ArenaManager;
-import de.jgaertig.sulfurFun.commands.JoinFootballCommand;
+import de.jgaertig.sulfurFun.commands.FootballCommand;
 import de.jgaertig.sulfurFun.commands.NewArenaCommand;
 import de.jgaertig.sulfurFun.game.GameManager;
 import org.bukkit.Bukkit;
@@ -23,6 +23,8 @@ public final class SulfurFun extends JavaPlugin {
     LanguageManager languageManager;
     GameManager gameManager;
     ArenaManager arenaManager;
+
+
 
     @Override
     public void onEnable() {
@@ -51,13 +53,14 @@ public final class SulfurFun extends JavaPlugin {
     }
 
     private void setupGameSystem() {
-        this.arenaManager = new ArenaManager(this, languageManager);
         this.gameManager = new GameManager(this, languageManager);
+        this.arenaManager = new ArenaManager(this, languageManager, gameManager);
+
     }
 
     public void registerCommandsAndListeners(){
-        getCommand("football").setExecutor(new JoinFootballCommand(this, languageManager, arenaManager));
-        getCommand("newgame").setExecutor(new NewArenaCommand(this, languageManager));
+        getCommand("football").setExecutor(new FootballCommand(this, languageManager, arenaManager));
+        getCommand("newarena").setExecutor(new NewArenaCommand(this, languageManager));
     }
 
     private void sendEnableMessage() {
@@ -89,6 +92,10 @@ public final class SulfurFun extends JavaPlugin {
 
     public LanguageManager getLanguageManager() {
         return languageManager;
+    }
+
+    public GameManager getGameManager() {
+        return gameManager;
     }
 
     public static class LanguageManager {
