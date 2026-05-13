@@ -12,5 +12,5 @@ commands:
   football:
     usage: /football
   newarena:
-    usage: /newgame <gamemode>
+    usage: /newarena <gamemode> <arena_id>
     permission: operator
