@@ -6,11 +6,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jspecify.annotations.NonNull;
 
 public class GameCommand implements CommandExecutor {
 
-    private Plugin plugin;
-    private SulfurFun.LanguageManager languageManager;
+    protected Plugin plugin;
+    protected SulfurFun.LanguageManager languageManager;
 
     public GameCommand(Plugin plugin, SulfurFun.LanguageManager languageManager) {
         this.plugin = plugin;
@@ -18,12 +19,12 @@ public class GameCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
-        if(!(sender instanceof Player)){
+    public boolean onCommand(@NonNull CommandSender sender, @NonNull Command cmd, @NonNull String label, String[] args){
+        if(!(sender instanceof Player player)){
             languageManager.send(sender, "for_players_only");
             return false;
         }
-        Player player = (Player) sender;
+
         return command(player, args);
     }
 

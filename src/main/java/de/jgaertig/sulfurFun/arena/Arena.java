@@ -2,7 +2,6 @@ package de.jgaertig.sulfurFun.arena;
 
 import de.jgaertig.sulfurFun.Mode;
 import de.jgaertig.sulfurFun.SulfurFun;
-import de.jgaertig.sulfurFun.game.Game;
 import de.jgaertig.sulfurFun.game.GameManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;

@@ -18,11 +18,10 @@ public class ArenaManager {
     private final JavaPlugin javaPlugin;
     private final Plugin plugin;
     private final SulfurFun.LanguageManager languageManager;
-    private File arenasFile;
     private YamlConfiguration arenasConfig;
 
-    private List<Arena> arenas;
-    private GameManager gameManager;
+    private final List<Arena> arenas;
+    private final GameManager gameManager;
 
     public ArenaManager(JavaPlugin plugin, SulfurFun.LanguageManager languageManager, GameManager gameManager) {
         this.javaPlugin = plugin;
@@ -44,6 +43,8 @@ public class ArenaManager {
                     bestArena = a;
                 }else{
                     int player_number = a.players.size();
+
+                    // An Flo: Laut IntelliJ kannst das 'a.state == ArenaState.WAITING' weglassen, weil es immer true ist
                     if (a.state == ArenaState.WAITING && player_number < a.maxPlayers && player_number > bestArena.players.size()){
                         bestArena = a;
                     }
@@ -87,7 +88,7 @@ public class ArenaManager {
 
 
     private void loadArenasFromConfig(){
-        arenasFile = new File(javaPlugin.getDataFolder(), "arenas.yml");
+        File arenasFile = new File(javaPlugin.getDataFolder(), "arenas.yml");
         if (!arenasFile.exists()) {
             javaPlugin.saveResource("arenas.yml", false);
         }

@@ -1,6 +1,8 @@
 package de.jgaertig.sulfurFun;
 
 import de.jgaertig.sulfurFun.arena.ArenaManager;
+import de.jgaertig.sulfurFun.arena.setup.SetupListener;
+import de.jgaertig.sulfurFun.arena.setup.SetupManager;
 import de.jgaertig.sulfurFun.commands.FootballCommand;
 import de.jgaertig.sulfurFun.commands.NewArenaCommand;
 import de.jgaertig.sulfurFun.game.GameManager;
@@ -13,17 +15,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class SulfurFun extends JavaPlugin {
 
     LanguageManager languageManager;
     GameManager gameManager;
     ArenaManager arenaManager;
-
+    SetupManager setupManager;
 
 
     @Override
@@ -55,12 +54,15 @@ public final class SulfurFun extends JavaPlugin {
     private void setupGameSystem() {
         this.gameManager = new GameManager(this, languageManager);
         this.arenaManager = new ArenaManager(this, languageManager, gameManager);
+        this.setupManager = new SetupManager();
 
     }
 
     public void registerCommandsAndListeners(){
-        getCommand("football").setExecutor(new FootballCommand(this, languageManager, arenaManager));
-        getCommand("newarena").setExecutor(new NewArenaCommand(this, languageManager));
+        Objects.requireNonNull(getCommand("football")).setExecutor(new FootballCommand(this, languageManager, arenaManager));
+        Objects.requireNonNull(getCommand("newarena")).setExecutor(new NewArenaCommand(this, languageManager, setupManager));
+
+        getServer().getPluginManager().registerEvents(new SetupListener(setupManager), this);
     }
 
     private void sendEnableMessage() {
@@ -88,10 +90,6 @@ public final class SulfurFun extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(gray + "Version: " + getDescription().getVersion());
         Bukkit.getConsoleSender().sendMessage(green + "Plugin loaded ...");
         Bukkit.getConsoleSender().sendMessage("");
-    }
-
-    public LanguageManager getLanguageManager() {
-        return languageManager;
     }
 
     public GameManager getGameManager() {
@@ -151,5 +149,19 @@ public final class SulfurFun extends JavaPlugin {
             }
             player.sendMessage(message);
         }
+    }
+
+    public boolean hasCommandPermission(CommandSender sender, String command) {
+        if (!(sender instanceof Player)) {
+            return true;
+        }
+
+        String perm = getConfig().getString("permissions_for_commands." + command, "op");
+
+        if (perm.equalsIgnoreCase("op")) return sender.isOp();
+        if (perm.equalsIgnoreCase("true")) return true;
+        if (perm.equalsIgnoreCase("false")) return false;
+
+        return sender.hasPermission(perm);
     }
 }

@@ -14,10 +14,15 @@ public class FootballCommand extends GameCommand {
     }
     public boolean command(Player player, String[] args){
 
+        if (!((SulfurFun) plugin).hasCommandPermission(player, "football")) {
+            languageManager.send(player, "no_permission");
+            return true;
+        }
+
         if (args.length == 0){
             return arenaManager.autoJoin(Mode.FOOTBALL, player);
         }else{
-
+            // TODO: Join specific arena
         }
         return false;
     }
