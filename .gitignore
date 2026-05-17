@@ -18,3 +18,5 @@ buildNumber.properties
 
 
 server/
+.idea/
+SulfurFun.iml
