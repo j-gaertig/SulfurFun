@@ -1,5 +1,6 @@
 package de.jgaertig.sulfurFun;
 
+<<<<<<< Updated upstream
 import de.jgaertig.sulfurFun.arena.ArenaManager;
 import de.jgaertig.sulfurFun.arena.setup.SetupListener;
 import de.jgaertig.sulfurFun.arena.setup.SetupManager;
@@ -8,6 +9,16 @@ import de.jgaertig.sulfurFun.commands.FootballCommand;
 import de.jgaertig.sulfurFun.commands.ListArenasCommand;
 import de.jgaertig.sulfurFun.commands.NewArenaCommand;
 import de.jgaertig.sulfurFun.game.GameManager;
+=======
+import de.jgaertig.sulfurFun.commands.DeleteGame;
+import de.jgaertig.sulfurFun.commands.JoinGame;
+import de.jgaertig.sulfurFun.commands.LeaveGame;
+import de.jgaertig.sulfurFun.commands.NewGame;
+import de.jgaertig.sulfurFun.listeners.SetupListener;
+import de.jgaertig.sulfurFun.models.ArenaManager;
+import de.jgaertig.sulfurFun.models.GameManager;
+import de.jgaertig.sulfurFun.tasks.ActionbarTask;
+>>>>>>> Stashed changes
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -21,11 +32,19 @@ import java.util.*;
 
 public final class SulfurFun extends JavaPlugin {
 
+<<<<<<< Updated upstream
     LanguageManager languageManager;
     GameManager gameManager;
     ArenaManager arenaManager;
     SetupManager setupManager;
 
+=======
+    private File arenaFile;
+    private FileConfiguration arenaConfig;
+    private LanguageManager languageManager;
+    private ArenaManager arenaManager;
+    private GameManager gameManager;
+>>>>>>> Stashed changes
 
     @Override
     public void onEnable() {
@@ -58,6 +77,42 @@ public final class SulfurFun extends JavaPlugin {
         this.arenaManager = new ArenaManager(this, languageManager, gameManager);
         this.setupManager = new SetupManager();
 
+<<<<<<< Updated upstream
+=======
+        this.arenaManager = new ArenaManager();
+        this.gameManager = new GameManager(this.arenaManager);
+
+        if (arenaConfig != null) {
+            for (String arenaName : arenaConfig.getKeys(false)) {
+                int max = arenaConfig.getInt(arenaName + ".maxplayers");
+                arenaManager.loadArena(arenaName, max);
+            }
+        }
+        // 1. Listener mit Manager erstellen
+        SetupListener setupListener = new SetupListener(this.languageManager);
+        ActionbarTask actionbarTask = new ActionbarTask(this, this.arenaManager);
+
+        // 2. Commands mit Manager erstellen
+        NewGame newGameCommand = new NewGame(this, setupListener, this.languageManager, this.gameManager);
+        DeleteGame deleteGameCommand = new DeleteGame(this, setupListener, this.languageManager, this.gameManager);
+        JoinGame joinGameCommand = new JoinGame(this, this.languageManager, this.arenaManager, this.gameManager);
+        LeaveGame leaveGame = new LeaveGame(this.arenaManager, this.languageManager, this.gameManager);
+
+        new ActionbarTask(this, this.arenaManager).runTaskTimer(this, 20L, 20L);
+
+        // 3. Verknüpfung setzen
+        setupListener.setNewGameCommand(newGameCommand);
+
+        // 4. Registrierung
+        getCommand("newgame").setExecutor(newGameCommand);
+        getCommand("newgame").setTabCompleter(newGameCommand);
+        getCommand("deletegame").setExecutor(deleteGameCommand);
+        getCommand("deletegame").setTabCompleter(deleteGameCommand);
+        getCommand("joingame").setExecutor(joinGameCommand);
+        getCommand("leavegame").setExecutor(leaveGame);
+
+        getServer().getPluginManager().registerEvents(setupListener, this);
+>>>>>>> Stashed changes
     }
 
     public void registerCommandsAndListeners(){
