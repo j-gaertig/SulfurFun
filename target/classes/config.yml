@@ -5,9 +5,12 @@
 permissions_for_commands:
     football: true
     newarena: op
+    deletearena: op
+    listarenas: op
+
+countdownSeconds: 30
 
 ### WARNING: DANGEROUS SETTINGS BELOW! DO NOT CHANGE UNLESS YOU KNOW WHAT YOU ARE DOING! ###
 
 ConfigVersion: 1.0
 
-countdownSeconds: 30

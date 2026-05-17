@@ -3,7 +3,9 @@ package de.jgaertig.sulfurFun;
 import de.jgaertig.sulfurFun.arena.ArenaManager;
 import de.jgaertig.sulfurFun.arena.setup.SetupListener;
 import de.jgaertig.sulfurFun.arena.setup.SetupManager;
+import de.jgaertig.sulfurFun.commands.DeleteGameCommand;
 import de.jgaertig.sulfurFun.commands.FootballCommand;
+import de.jgaertig.sulfurFun.commands.ListArenasCommand;
 import de.jgaertig.sulfurFun.commands.NewArenaCommand;
 import de.jgaertig.sulfurFun.game.GameManager;
 import org.bukkit.Bukkit;
@@ -61,8 +63,15 @@ public final class SulfurFun extends JavaPlugin {
     public void registerCommandsAndListeners(){
         Objects.requireNonNull(getCommand("football")).setExecutor(new FootballCommand(this, languageManager, arenaManager));
         Objects.requireNonNull(getCommand("newarena")).setExecutor(new NewArenaCommand(this, languageManager, setupManager));
+        Objects.requireNonNull(getCommand("deletearena")).setExecutor(new DeleteGameCommand(this, languageManager, setupManager));
+        Objects.requireNonNull(getCommand("listarenas")).setExecutor(new ListArenasCommand(this, languageManager));
+
 
         getServer().getPluginManager().registerEvents(new SetupListener(setupManager), this);
+    }
+
+    public ArenaManager getArenaManager() {
+        return arenaManager;
     }
 
     private void sendEnableMessage() {

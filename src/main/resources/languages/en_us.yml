@@ -12,3 +12,10 @@ game_starting_in: "&aThe game starts in %seconds% seconds!"
 newarena_usage: "&cUsage: /newgame <gamemode> <arena_id>"
 gamemode_not_found: "&cGamemode not found!"
 arena_already_exists: "&cAn arena with this id already exists!"
+
+# deletearena command
+deletearena_usage: "&cUsage: /deletegame <arena_id>"
+arena_not_found: "&cArena not found! Type /listarenas to see all available arenas."
+arena_deleted: "&aArena has been deleted!"
+
+# listarenas command

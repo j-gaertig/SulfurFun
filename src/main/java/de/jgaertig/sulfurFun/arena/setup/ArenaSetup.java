@@ -32,4 +32,8 @@ public abstract class ArenaSetup {
         }
     }
 
+    public int getCurrentStep() {
+        return currentStep;
+    }
+
 }

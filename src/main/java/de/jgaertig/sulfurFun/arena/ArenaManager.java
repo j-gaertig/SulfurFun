@@ -164,4 +164,9 @@ public class ArenaManager {
 
         return new Goal(c1x, c1y, c1z, c2x, c2y, c2z);
     }
+
+    public void reload() {
+        arenas.clear();
+        loadArenasFromConfig();
+    }
 }

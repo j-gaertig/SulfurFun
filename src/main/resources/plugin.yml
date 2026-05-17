@@ -11,5 +11,10 @@ website: https://github.com/j-gaertig/SulfurFun
 commands:
   football:
     usage: /football
+    aliases: [soccer]
   newarena:
     usage: /newarena <gamemode> <arena_id>
+  deletearena:
+    usage: /deletearena <arena_id>
+  listarenas:
+    usage: /listarenas [arena_id]

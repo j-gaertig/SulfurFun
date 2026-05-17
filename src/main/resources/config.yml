@@ -5,6 +5,8 @@
 permissions_for_commands:
     football: true
     newarena: op
+    deletearena: op
+    listarenas: op
 
 countdownSeconds: 30
 

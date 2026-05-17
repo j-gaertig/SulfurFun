@@ -1,5 +1,21 @@
+# general
 for_players_only: "&cThis command is for players only!"
+no_permission: "&cYou don´t have permission to execute this command!"
+
+# join gamemode commands
 already_in_game: "&cYou can´t leave a active game!"
 no_arena_available: "&cNo arena is available."
 not_enough_players: "&cNot enough players to start the game!"
 game_starting_in: "&aThe game starts in %seconds% seconds!"
+
+# newarena command
+newarena_usage: "&cUsage: /newgame <gamemode> <arena_id>"
+gamemode_not_found: "&cGamemode not found!"
+arena_already_exists: "&cAn arena with this id already exists!"
+
+# deletearena command
+deletearena_usage: "&cUsage: /deletegame <arena_id>"
+arena_not_found: "&cArena not found! Type /listarenas to see all available arenas."
+arena_deleted: "&aArena has been deleted!"
+
+# listarenas command
