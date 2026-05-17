@@ -1,0 +1,31 @@
+name: "💡 Feature Request"
+description: "Suggest an idea for this plugin"
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: "Have an idea to improve the plugin? We would love to hear it!"
+
+  - type: textarea
+    id: feature-ideal
+    attributes:
+      label: "Is your feature request related to a problem?"
+      description: "A clear and concise description of what the problem is. (e.g. I'm frustrated when...)"
+    validations:
+      required: false
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: "Describe the solution you'd like"
+      description: "A clear and concise description of what you want to happen and how it should work in-game."
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature-alternatives
+    attributes:
+      label: "Describe alternatives you've considered"
+      description: "Any alternative solutions or features you have considered or seen in other plugins."
+    validations:
+      required: false
