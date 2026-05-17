@@ -1,2 +1,0 @@
-- [ ] player join check ob player in aktivem game oder in gleichem spielmodus schon wartend [Link](arena/ArenaManager.java)
-- [ ] command names in config [Link](SulfurFun.java)
